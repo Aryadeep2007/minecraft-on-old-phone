@@ -1,0 +1,51 @@
+# Secret and generated-data exclusions
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+*.jks
+*.keystore
+
+# Minecraft server runtime data
+server.jar
+paper-*.jar
+*.jar
+world/
+world_nether/
+world_the_end/
+plugins/**
+!plugins/.gitkeep
+logs/
+crash-reports/
+*.log
+*.log.gz
+usercache.json
+whitelist.json
+ops.json
+banned-players.json
+banned-ips.json
+server.properties
+
+# Real configuration and service credentials
+config.yml
+config.yaml
+*.secret
+*.token
+rcon*
+tunnel*
+
+# Python and local dashboard state
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+instance/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
