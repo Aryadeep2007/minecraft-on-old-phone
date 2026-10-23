@@ -16,7 +16,7 @@ flowchart LR
   F[Floodgate identity bridge] --> G
   A[AuthMe + PacketEvents] --> P
   D[Private dashboard] -->|RCON on localhost| P
-  O[Operator] -->|Tailscale or private access| D
+  O[Operator PC] -->|SSH local port forward| D
   T[Termux:Boot and wake lock] --> P
 ```
 
@@ -30,8 +30,8 @@ flowchart LR
 | Premium and offline Java accounts | AuthMe premium bypass and PacketEvents, with whitelist | 🟡 In progress |
 | Reliability | Termux:Boot, wake lock, battery and thermal guidance | 🟡 In progress |
 | Internet connectivity | TCP/UDP tunnel suitable for CGNAT | 🟡 In progress |
-| Private controls | Small dashboard using local RCON | ⬜ Planned |
-| Backups | User-controlled backup scripts | ⬜ Planned |
+| Private controls | Flask dashboard using loopback RCON and SSH forwarding | 🟡 In progress |
+| Backups | Dashboard world archive action; phone verification pending | 🟡 In progress |
 
 Status key: ✅ Done and verified · 🟡 In progress · ⬜ Planned
 
@@ -72,13 +72,13 @@ No command below should be treated as verified until it is tested and recorded i
 | 4. Cracked and premium Java access | [04-auth-cracked-premium.md](docs/04-auth-cracked-premium.md) | 🟡 In progress |
 | 5. 24/7 reliability | [05-24-7-reliability.md](docs/05-24-7-reliability.md) | 🟡 In progress |
 | 6. Tunnel access | [06-tunnel-access.md](docs/06-tunnel-access.md) | 🟡 In progress |
-| 7. Dashboard | [07-dashboard.md](docs/07-dashboard.md) | ⬜ Planned |
+| 7. Dashboard | [07-dashboard.md](docs/07-dashboard.md) | 🟡 In progress |
 
 See [troubleshooting](docs/troubleshooting.md) for verified errors and fixes and [security](docs/security.md) for security practices.
 
 ## Security notes
 
-- Never expose RCON or the dashboard directly to the public internet. Keep RCON bound to localhost and restrict dashboard access through a private network such as Tailscale.
+- Never expose RCON or the dashboard directly to the public internet. The dashboard binds to phone localhost and is accessed from a trusted computer through an SSH local port forward.
 - Never commit passwords, tokens, SSH keys, tunnel credentials, server data, player data, or logs. Use the sanitized files in `config-examples/` and keep real configuration on the phone.
 - Offline-mode Java servers cannot verify ownership of Java account names. Use a trusted authentication plugin, strong unique passwords, and a whitelist; understand the trade-offs before allowing offline accounts.
 - Review every command before running it. Keep backups outside the active world directory and verify that they can be restored.

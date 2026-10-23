@@ -34,7 +34,7 @@ config.yml
 config.yaml
 *.secret
 *.token
-rcon*
+!dashboard/rcon.py
 tunnel*
 
 # Python and local dashboard state

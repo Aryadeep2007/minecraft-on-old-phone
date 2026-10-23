@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Minecraft Server</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="login-wrap">
+    <section class="card login-card">
+      <p class="eyebrow">PRIVATE CONTROL PANEL</p>
+      <h1>Minecraft server</h1>
+      <p class="muted">Sign in to manage the phone-hosted Paper server.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}<p class="notice {{ category }}" role="status">{{ message }}</p>{% endfor %}
+      {% endwith %}
+      <form method="post" action="{{ url_for('login') }}">
+        <label for="password">Dashboard password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+        <button type="submit">Sign in</button>
+      </form>
+      <p class="security-hint">Access this page through an SSH port forward. Do not expose it to the public internet.</p>
+    </section>
+  </main>
+</body>
+</html>

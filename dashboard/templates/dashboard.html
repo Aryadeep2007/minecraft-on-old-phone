@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Server dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='dashboard.js') }}" defer></script>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div><p class="eyebrow">PRIVATE CONTROL PANEL</p><h1>Minecraft server</h1></div>
+      <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button-secondary" type="submit">Sign out</button></form>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}<p class="notice {{ category }}" role="status">{{ message }}</p>{% endfor %}
+    {% endwith %}
+    <section class="card status-card">
+      <div><p class="eyebrow">SERVER STATUS</p><h2><span class="dot {{ 'online' if status == 'Running' else 'offline' }}"></span>{{ status }}</h2><p class="muted">Players: {{ players }}</p></div>
+      <div class="actions">
+        {% for action, label in [('start','Start'),('stop','Stop'),('restart','Restart')] %}
+        <form method="post" action="{{ url_for('server_action', action=action) }}" data-confirm="{{ label }} the Minecraft server?">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="{{ 'button-danger' if action == 'stop' else '' }}" type="submit">{{ label }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    </section>
+    <div class="grid">
+      <section class="card">
+        <p class="eyebrow">PLAYER ACCESS</p><h2>Whitelist</h2>
+        <form method="post" action="{{ url_for('whitelist', action='add') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label class="sr-only" for="add-name">Java username</label><input id="add-name" name="name" placeholder="Java username" minlength="3" maxlength="16" required><button type="submit">Add</button></form>
+        <form method="post" action="{{ url_for('whitelist', action='remove') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label class="sr-only" for="remove-name">Java username</label><input id="remove-name" name="name" placeholder="Java username" minlength="3" maxlength="16" required><button class="button-secondary" type="submit">Remove</button></form>
+      </section>
+      <section class="card">
+        <p class="eyebrow">WORLD DATA</p><h2>Backups</h2>
+        <p class="muted">Creates a compressed archive of the three world folders on the phone.</p>
+        <form method="post" action="{{ url_for('backup') }}" data-confirm="Create a world backup? This uses phone storage."><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit">Create backup</button></form>
+        {% if backups %}<ul class="backup-list">{% for backup in backups %}<li>{{ backup.name }}</li>{% endfor %}</ul>{% else %}<p class="muted">No world backups found.</p>{% endif %}
+      </section>
+    </div>
+    <section class="card">
+      <p class="eyebrow">RCON CONSOLE</p><h2>Run a server command</h2>
+      <form method="post" action="{{ url_for('console') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label class="sr-only" for="command">Server command</label><input id="command" name="command" placeholder="e.g. say Server restarting soon" maxlength="2048" required><button type="submit">Run command</button></form>
+      <p class="security-hint">Console commands have full server privileges. Use only on a trusted computer over SSH forwarding.</p>
+    </section>
+    <footer>Local-only dashboard · Keep this page private</footer>
+  </main>
+</body>
+</html>
