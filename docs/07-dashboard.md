@@ -1,6 +1,6 @@
 # 07 — Private web dashboard
 
-**Status: In progress.** The Flask and Waitress dashboard, login page, server controls, whitelist forms, RCON console, and world-backup action are implemented in this repository. Source-level checks are complete. Deployment on the phone and end-to-end verification remain pending. The dashboard is designed to listen only on phone loopback and to be reached from a trusted computer through SSH local forwarding.
+**Status: In progress.** The Flask and Waitress dashboard, login page, server controls, whitelist forms, RCON console, and world-backup action are implemented in this repository. The dashboard has been installed on the target phone and the login plus RCON-backed status page were verified through an SSH local forward. Server-control actions, whitelist changes, backup creation, and automatic dashboard startup after reboot remain unverified. The dashboard listens only on phone loopback.
 
 ## What it provides
 
@@ -56,12 +56,29 @@ ssh -N -L 8765:127.0.0.1:8765 -p 8022 <TERMUX_USER>@<PHONE_LAN_IP>
 
 Then browse to `http://127.0.0.1:8765`. Leave the SSH command running while using the page. Replace placeholders only in the command; never record your private address or username in this repository. Stop the forward with Ctrl+C when finished. If port 8765 is already occupied on the computer, use another local port, for example `-L 18765:127.0.0.1:8765`, and open `http://127.0.0.1:18765`.
 
+The dashboard password is generated on the phone and stored only in its mode-`600` `.env`. To display it in a trusted computer's terminal when signing in, run:
+
+```sh
+ssh -i <SSH_KEY_PATH> -p 8022 <TERMUX_USER>@<PHONE_LAN_IP> "grep '^DASHBOARD_PASSWORD=' ~/minecraft-on-old-phone/.env | cut -d= -f2-"
+```
+
+Do not paste the command output into chat, issues, or logs.
+
+## Verified on the target phone
+
+- The public repository was cloned to `~/minecraft-on-old-phone` at commit `20a8fb6`; Git was installed in Termux because it was not present initially.
+- Flask and Waitress were installed in the project-local `.venv` from the pinned requirements.
+- The phone-only `.env` was created with mode `600`. The RCON password was read from the private Paper config, and separate session and dashboard passwords were generated on the phone. No secret was printed or committed.
+- Waitress served the login page over phone loopback at port `8765`; a connection to the phone's Wi-Fi address on that port failed.
+- From the computer, the SSH forward to local port `18765` returned HTTP 200. A successful login displayed the dashboard and an RCON-backed player status, with credentials kept out of command output.
+- The SSH forward runs as a separate SSH session on the computer. The dashboard was launched detached in Termux but has not been added to the Termux:Boot hook.
+
 ## Verification checklist
 
-- [ ] Confirm the dashboard process starts on the phone with private `.env` permissions.
-- [ ] Confirm it is listening only on `127.0.0.1:8765`.
-- [ ] Confirm SSH port forwarding opens the sign-in page from the computer.
-- [ ] Confirm an incorrect password is rejected and the correct password opens the panel.
+- [x] Confirm the dashboard process starts on the phone with private `.env` permissions.
+- [x] Confirm it is listening only on `127.0.0.1:8765`.
+- [x] Confirm SSH port forwarding opens the sign-in page from the computer.
+- [x] Confirm a successful sign-in opens the panel and shows RCON-backed status.
 - [ ] Confirm server actions, whitelist, console, and backup behavior after RCON is enabled safely.
 - [ ] Confirm the dashboard is not reachable through the Java or Bedrock game tunnel.
 
