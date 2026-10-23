@@ -1,6 +1,6 @@
 # 2. PaperMC
 
-**Status: In progress.** Paper 1.21.11 stable build 132 is installed and its first startup reached the EULA gate. The server has not completed a full startup; the EULA remains `false` until the operator reviews and accepts it.
+**Status: In progress.** Paper 1.21.11 stable build 132 completed its first full startup and was stopped cleanly. Heap/view-distance tuning and operational scripts remain to be verified.
 
 ## Goal
 
@@ -9,6 +9,8 @@ Run a small Paper server on Termux with a conservative heap limit, then verify t
 ## Version selection
 
 The agreed Termux runtime is Java 21. Paper's current requirements list Java 21 for Minecraft 1.20 through 1.21.11 and Java 25 for Paper 26.1 and newer. This guide therefore uses the latest stable Paper build in the Java 21-compatible 1.21.11 line. Recheck Java requirements before changing versions.
+
+Paper reported at startup that stable 26.3 was six releases newer than 1.21.11. The project stays on 1.21.11 to match the agreed Java 21 runtime; Java clients must use a compatible Minecraft version unless a later phase adds and verifies a compatibility plugin.
 
 - [Paper Java requirements](https://docs.papermc.io/paper/getting-started/)
 - [Paper downloads service](https://docs.papermc.io/misc/downloads-service/)
@@ -51,10 +53,12 @@ Verified on the target OPPO A57 using OpenJDK 21.0.13 (`aarch64`):
 | JAR size | 54,846,016 bytes (about 52.3 MiB) |
 | SHA-256 | `5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba` |
 | Bootstrap | Java 21 loaded Paper and completed remapping in about 70 seconds |
-| EULA | `eula.txt` created with `eula=false`; startup stopped as expected |
-| Persistent server | Not running; full startup awaits the operator's EULA decision |
+| EULA | Local `eula.txt` was set to `eula=true` for the startup verification; live file stays on the phone |
+| Full startup | Reached `Done (161.479s)` and created the Overworld, Nether, and End |
+| Shutdown | `stop` saved all dimensions; the Paper process exited |
+| Persistent server | Not left running after the verification boot |
 
-During bootstrap, Termux emitted JLine and OSHI/JNA native-library warnings about missing Linux libraries (`libutil.so.1` and `libudev`). Paper continued through server remapping and reached the EULA check. Full startup and gameplay still need verification.
+During startup, Termux emitted JLine and OSHI/JNA warnings about missing Linux libraries (`libutil.so.1` and `libudev`). Netty could not read a hardware MAC address and used random bytes; Spark's optional async-profiler could not load `libdl.so.2`. Paper still reached `Done` and shut down cleanly. Player connections and sustained performance are not verified yet.
 
 ## Security
 
