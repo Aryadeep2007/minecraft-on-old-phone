@@ -1,6 +1,6 @@
 # 1. Termux setup
 
-**Status: In progress.** SSH access and the phone architecture/memory check are verified. Java installation and runtime verification remain to be completed.
+**Status: In progress.** SSH access, architecture/memory inspection, and OpenJDK 21 installation are verified. A Paper startup test remains for the next phase.
 
 ## Goal
 
@@ -28,6 +28,16 @@ whoami
 ```
 
 Termux OpenSSH listens on port `8022` by default. Find the phone's local Wi-Fi address in Android **Settings → Wi-Fi → connected network details** if a network-interface query in Termux is denied.
+
+## Install OpenJDK 21
+
+Once SSH access is working, install the Java runtime from the Termux package repository:
+
+```sh
+pkg install -y openjdk-21
+```
+
+This installation pulled about 129 MB of packages and used about 337 MB of additional storage on the test phone. The package manager may install supporting libraries as dependencies.
 
 ## Configure key-based access
 
@@ -66,8 +76,10 @@ Verified on the target OPPO A57 (4 GB RAM; Android version not recorded):
 | Architecture | `aarch64` (ARM64) |
 | Memory reported by `free -h` | 3.7 GiB total; 2.0 GiB used; 176 MiB free; 1.5 GiB available |
 | Swap reported by `free -h` | 3.5 GiB total; 1.0 GiB used; 2.5 GiB free |
+| Java runtime | OpenJDK `21.0.13` (Termux package `openjdk-21`) |
+| Java architecture | `aarch64` |
 
-These values are a point-in-time reading and will change as Android apps use memory. OpenJDK 21 is not installed or verified yet.
+These memory values are a point-in-time reading and will change as Android apps use memory. Paper startup has not been tested yet.
 
 ## Security
 
