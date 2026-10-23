@@ -4,7 +4,7 @@
 
 A beginner-friendly guide and companion scripts for running a small, always-on Minecraft server on an older Android phone with Termux. The target setup supports Java and Bedrock players, account authentication, remote access through a tunnel, and a private web dashboard.
 
-> **Project status:** Planning and initial repository setup. Instructions will be marked complete only after they have been verified on the target device. Hardware, Android versions, and third-party services can change the exact steps and performance.
+> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 has passed bootstrap and is waiting at the EULA gate; the full server has not started. Instructions are marked complete only after verification on the target device. Hardware, Android versions, and third-party services can change the exact steps and performance.
 
 ## Architecture
 
@@ -67,7 +67,7 @@ No command below should be treated as verified until it is tested and recorded i
 | Phase | Guide | Status |
 |---|---|---|
 | 1. Termux and Java | [01-termux-setup.md](docs/01-termux-setup.md) | 🟡 In progress |
-| 2. PaperMC | [02-papermc.md](docs/02-papermc.md) | ⬜ Planned |
+| 2. PaperMC | [02-papermc.md](docs/02-papermc.md) | 🟡 In progress |
 | 3. Bedrock with Geyser | [03-bedrock-geyser.md](docs/03-bedrock-geyser.md) | ⬜ Planned |
 | 4. Cracked and premium Java access | [04-auth-cracked-premium.md](docs/04-auth-cracked-premium.md) | ⬜ Planned |
 | 5. 24/7 reliability | [05-24-7-reliability.md](docs/05-24-7-reliability.md) | ⬜ Planned |
