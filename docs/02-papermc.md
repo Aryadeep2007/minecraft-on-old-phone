@@ -1,6 +1,6 @@
 # 2. PaperMC
 
-**Status: In progress.** Paper 1.21.11 stable build 132 completed its first full startup and was stopped cleanly. The phone's `view-distance` is now set to 6. Heap/view-distance performance and operational scripts remain to be verified.
+**Status: In progress.** Paper 1.21.11 stable build 132 starts under Java 21 with a 1.5 GiB maximum heap. A detached Termux start reached `Done`, and TCP port 25565 was reachable from the setup computer on the local network. Gameplay, sustained performance, Termux:Boot, and wake-lock behavior remain unverified.
 
 ## Goal
 
@@ -44,6 +44,16 @@ chmod 700 start.sh
 
 The script expects `paper.jar` in the same directory and changes into that directory before starting Paper. Keep the script's line endings as LF on Termux.
 
+To keep Paper running after an SSH command or terminal session exits, launch it detached from the server directory:
+
+```sh
+cd ~/minecraft-server
+mkdir -p logs
+nohup ./start.sh >> logs/console.log 2>&1 < /dev/null &
+```
+
+Check `tail -n 30 logs/console.log` for Paper's `Done` message. On the target phone, running Paper in the foreground of an interactive SSH session stopped it when that session ended. The detached command above was verified: Paper stayed running after the SSH command completed and port 25565 accepted a local TCP connection. This does not yet configure Android boot startup or prevent Android from stopping Termux.
+
 On first launch, Paper writes `eula.txt` and stops while `eula=false`. Read the [Minecraft EULA](https://aka.ms/MinecraftEULA). Change the setting to `eula=true` only if the server operator agrees to the terms, then start Paper again. Never commit `eula.txt` or other live server files.
 
 ## Verified result
@@ -59,7 +69,7 @@ Verified on the target OPPO A57 using OpenJDK 21.0.13 (`aarch64`):
 | EULA | Local `eula.txt` was set to `eula=true` for the startup verification; live file stays on the phone |
 | Full startup | Reached `Done (161.479s)` and created the Overworld, Nether, and End |
 | Shutdown | `stop` saved all dimensions; the Paper process exited |
-| Persistent server | Not left running after the verification boot |
+| Persistent server | Detached start remained alive after SSH returned; local TCP port 25565 accepted a connection |
 | Start script | `./start.sh` launched Paper 1.21.11 with `-Xms512M -Xmx1536M`; reached `Done (103.466s)` and shut down cleanly |
 
 During startup, Termux emitted JLine and OSHI/JNA warnings about missing Linux libraries (`libutil.so.1` and `libudev`). Netty could not read a hardware MAC address and used random bytes; Spark's optional async-profiler could not load `libdl.so.2`. Paper still reached `Done` and shut down cleanly. Player connections and sustained performance are not verified yet.
@@ -72,11 +82,11 @@ After the first clean shutdown, `view-distance` was changed from the generated d
 |---|---:|---|
 | `view-distance` | `6` | Applied on the phone; gameplay performance not yet measured |
 | `simulation-distance` | `6` | Applied on the phone; gameplay performance not yet measured |
-| `online-mode` | `true` | Authentication phase has not started |
-| `white-list` | `false` | Whitelist phase has not started |
+| `online-mode` | `false` | AuthMe and PacketEvents are enabled for offline-mode authentication; see the authentication guide |
+| `white-list` | `true` | The operator's name is on the live whitelist; private player names stay out of Git |
 | `max-players` | `6` | Configured for the planned small group; concurrent-player performance not yet tested |
 
-Do not set `online-mode=false` until the authentication plan is implemented and verified.
+Offline mode does not authenticate usernames by itself. Keep AuthMe enabled, require password login for non-premium names, whitelist only trusted players, and do not expose the server through a public tunnel until login and whitelist behavior have been tested.
 
 ## Security
 
