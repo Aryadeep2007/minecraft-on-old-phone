@@ -1,6 +1,6 @@
 # 06 — Internet tunnel access
 
-**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel in the Playit account and the agent loaded one tunnel, but v1.0.10 reported `NetworkUnreachable` while pinging an IPv6 relay, followed by `SessionNotSetup`. A route check confirmed the phone has no IPv6 route to that relay, and the operator reports that Playit's `Allow IPv6` option is selected. The agent was stopped; the tunnel target and public forwarding have not been independently verified. A matching open issue exists in the [agent repository](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
+**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel and disabled Playit's `Allow IPv6` option. In a short foreground check, the agent loaded one tunnel without the previous `NetworkUnreachable` IPv6 relay error; it logged one `SessionNotSetup` warning at startup and then remained quiet for 10 seconds. Paper is running. The agent remains in the temporary foreground SSH session; its control session stability and public forwarding are not yet verified. The tunnel target and assigned port have not been independently read back. The earlier failure matched the [agent repository issue #194](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
 
 ## Goal
 
@@ -32,7 +32,8 @@ The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (
 - [x] Claim the agent without publishing its device credential.
 - [x] Verify the Playit account email and confirm that the agent connects.
 - [x] Create a Java TCP tunnel in the Playit account.
-- [ ] Verify its target is Paper at `127.0.0.1:25565`, resolve the agent's unavailable IPv6 relay route, and test public forwarding.
+- [x] Disable Playit's IPv6 option and confirm the unreachable IPv6 relay error stops in a short run.
+- [ ] Confirm the control session stays stable, verify the tunnel target and assigned port, and test public forwarding to Paper at `127.0.0.1:25565`.
 - [ ] Confirm authentication and whitelist protections before sharing any public game address.
 - [ ] Select and test the Bedrock transport and its exact required ports.
 
