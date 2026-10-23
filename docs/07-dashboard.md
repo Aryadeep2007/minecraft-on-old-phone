@@ -33,9 +33,11 @@ Use the actual server and backup paths if they differ from the example. The appl
 
 ## RCON prerequisite
 
-The live Paper configuration was inspected over key-authenticated SSH on 2026-10-24. It has `enable-rcon=false`, `rcon.port=25575`, a blank `server-ip`, and no separate `rcon.ip` property. Paper documents that blank `server-ip` binds the game server to all interfaces ([server properties](https://docs.papermc.io/paper/reference/server-properties/)). RCON was left disabled: enabling it with this configuration could expose the console on the phone's network interfaces. Changing `server-ip` to loopback would also change the game listener and could stop direct Wi-Fi clients from connecting. The existing Java tunnel points to `127.0.0.1:25565`, but that alone is not enough to justify changing the bind address without a tested rollback plan.
+The live Paper configuration was inspected over key-authenticated SSH on 2026-10-24. It had `enable-rcon=false`, `rcon.port=25575`, a blank `server-ip`, and no explicit `rcon.ip` entry. Paper documents that blank `server-ip` binds the game server to all interfaces ([server properties](https://docs.papermc.io/paper/reference/server-properties/)). Inspection of the installed Paper 1.21.11 server JAR confirmed that it recognizes the separate `rcon.ip` property.
 
-The dashboard therefore remains uninstalled on the phone and its RCON controls are not yet usable. Before enabling RCON, verify a Paper-supported dedicated loopback bind for this exact version or choose a different local control interface. Never tunnel or port-forward RCON.
+RCON was then enabled with `rcon.ip=127.0.0.1` and a newly generated private password. The existing blank `server-ip` was preserved, so the game listener stayed available on loopback and Wi-Fi. A private copy of the previous properties file was kept on the phone before the update. The server was shut down gracefully and restarted.
+
+Verification from Termux on the phone confirmed that the game port accepted connections at both `127.0.0.1` and the phone's Wi-Fi address. RCON accepted connections and authentication at `127.0.0.1`, refused the phone's Wi-Fi address, and returned a response to the read-only `list` command. The password and command response were not printed. The dashboard still needs to be installed and configured with this private RCON password before its controls can be used. Never tunnel or port-forward RCON.
 
 ## Start and connect
 
