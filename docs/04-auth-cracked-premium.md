@@ -1,6 +1,6 @@
 # 04 — Java authentication and offline accounts
 
-**Status: In progress.** AuthMe 6.0.1 and PacketEvents 2.14.0 are installed on Paper 1.21.11. A read-only inspection confirmed AuthMe registration and required authentication are enabled, the server is in offline mode, the whitelist is on, and the operator's Java name is present in it. The server is running; a real registration/login flow and premium verification have not yet been tested.
+**Status: In progress.** AuthMe 6.0.1 and PacketEvents 2.14.0 are installed on Paper 1.21.11. A read-only inspection confirmed AuthMe registration and required authentication are enabled, the server is in offline mode, the whitelist is on, and the operator's Java name is present in it. The operator confirmed that a non-premium Java player authenticated with an AuthMe password and joined. First-time registration was not separately confirmed, and premium verification remains untested.
 
 ## Goal
 
@@ -42,7 +42,7 @@ Start Paper with `./start.sh` and confirm the startup log lists `AuthMe (6.0.1)`
 - Existing Geyser, Floodgate, and ViaVersion also loaded. Geyser started UDP port 19132.
 - A later read-only check confirmed `online-mode=false`, `white-list=true`, and the operator's whitelist entry. AuthMe registration is enabled and `force: true` requires authentication before players can play. The operator's exact name is intentionally omitted from this public guide.
 - Paper's `enforce-whitelist` property is currently `false`. Paper documents this as controlling whether players who are not on the whitelist are kicked; the separate `white-list=true` setting remains enabled and is the join gate. No live setting was changed during this inspection.
-- No player authentication flow has been tested yet. During the earlier plugin-install check, the then-current `online-mode=true` and `white-list=false` settings were left unchanged; they were changed in a later configuration step.
+- The operator confirmed a successful non-premium Java password login and join. First-time registration was not separately confirmed. During the earlier plugin-install check, the then-current `online-mode=true` and `white-list=false` settings were left unchanged; they were changed in a later configuration step.
 
 ## Join the local server
 
@@ -58,7 +58,7 @@ This phone's operator name was added successfully through the console (`Added ..
 
 ## Next configuration work
 
-The live server is in offline mode with AuthMe premium bypass (`settings.enablePremium: true`), PacketEvents installed, and the whitelist enabled. The next check is a successful non-premium registration and login, followed by a premium account enrollment test if one is available. Also check whitelist behavior and Bedrock join behavior before exposing the server through a tunnel.
+The live server is in offline mode with AuthMe premium bypass (`settings.enablePremium: true`), PacketEvents installed, and the whitelist enabled. Non-premium password login and joining are verified. Confirm first-time registration separately if it has not already occurred, and test premium account enrollment if one is available. Also check whitelist behavior and Bedrock join behavior before exposing the server through a tunnel.
 
 For premium bypass, players opt in individually after registration/login with `/premium`; AuthMe verifies their Mojang account and stores the enrollment. Without PacketEvents, AuthMe fails closed and uses normal password authentication.
 
