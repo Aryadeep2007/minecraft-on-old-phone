@@ -4,7 +4,7 @@
 
 A beginner-friendly guide and companion scripts for running a small, always-on Minecraft server on an older Android phone with Termux. The target setup supports Java and Bedrock players, account authentication, remote access through a tunnel, and a private web dashboard.
 
-> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, and ViaVersion have loaded, and Geyser started its RakNet listener. An isolated Alpine/musl userland also started Geyser Standalone with NetherNet selected. Backend integration, Bedrock client connections, and sustained performance are not yet verified; the Paper Geyser listener remains on RakNet. See the Bedrock guide and troubleshooting page.
+> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, ViaVersion, AuthMe 6.0.1, and PacketEvents 2.14.0 have loaded. Authentication settings and player logins have not been tested. Geyser started its RakNet listener, but upcoming NetherNet compatibility and Bedrock client connections are not yet verified. See the [authentication guide](docs/04-auth-cracked-premium.md), [Bedrock guide](docs/03-bedrock-geyser.md), and [troubleshooting page](docs/troubleshooting.md).
 
 ## Architecture
 
@@ -14,7 +14,7 @@ flowchart LR
   B[Bedrock players] -->|UDP via tunnel| G[Geyser]
   G --> P
   F[Floodgate identity bridge] --> G
-  A[AuthMe / FastLogin] --> P
+  A[AuthMe + PacketEvents] --> P
   D[Private dashboard] -->|RCON on localhost| P
   O[Operator] -->|Tailscale or private access| D
   T[Termux:Boot and wake lock] --> P
@@ -27,7 +27,7 @@ flowchart LR
 | Android server | Termux and OpenJDK 21 | 🟡 In progress |
 | Lightweight Java server | PaperMC with conservative memory and view distance | 🟡 In progress |
 | Bedrock connectivity | Geyser, Floodgate, and ViaVersion | 🟡 In progress |
-| Premium and offline Java accounts | AuthMe and FastLogin, with whitelist | ⬜ Planned |
+| Premium and offline Java accounts | AuthMe premium bypass and PacketEvents, with whitelist | 🟡 In progress |
 | Reliability | Termux:Boot, wake lock, battery and thermal guidance | ⬜ Planned |
 | Internet connectivity | TCP/UDP tunnel suitable for CGNAT | ⬜ Planned |
 | Private controls | Small dashboard using local RCON | ⬜ Planned |
@@ -69,7 +69,7 @@ No command below should be treated as verified until it is tested and recorded i
 | 1. Termux and Java | [01-termux-setup.md](docs/01-termux-setup.md) | 🟡 In progress |
 | 2. PaperMC | [02-papermc.md](docs/02-papermc.md) | 🟡 In progress |
 | 3. Bedrock with Geyser | [03-bedrock-geyser.md](docs/03-bedrock-geyser.md) | 🟡 In progress |
-| 4. Cracked and premium Java access | [04-auth-cracked-premium.md](docs/04-auth-cracked-premium.md) | ⬜ Planned |
+| 4. Cracked and premium Java access | [04-auth-cracked-premium.md](docs/04-auth-cracked-premium.md) | 🟡 In progress |
 | 5. 24/7 reliability | [05-24-7-reliability.md](docs/05-24-7-reliability.md) | ⬜ Planned |
 | 6. Tunnel access | [06-tunnel-access.md](docs/06-tunnel-access.md) | ⬜ Planned |
 | 7. Dashboard | [07-dashboard.md](docs/07-dashboard.md) | ⬜ Planned |
@@ -91,6 +91,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report reproducible device-specific issu
 
 - [PaperMC](https://papermc.io/) for the server software.
 - [GeyserMC](https://geysermc.org/) for Java/Bedrock connectivity and Floodgate.
+- [AuthMeReloaded](https://github.com/AuthMe/AuthMeReloaded) for password authentication and premium bypass.
+- [PacketEvents](https://github.com/retrooper/packetevents) for AuthMe's offline-mode premium verification.
 - Termux and its community for Android terminal tools.
 - Plugin and tunnel projects will be credited in the corresponding guides after their versions and configuration are verified.
 
