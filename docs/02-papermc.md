@@ -71,10 +71,10 @@ After the first clean shutdown, `view-distance` was changed from the generated d
 | Property | Current value | Note |
 |---|---:|---|
 | `view-distance` | `6` | Applied on the phone; gameplay performance not yet measured |
-| `simulation-distance` | `10` | Left unchanged |
+| `simulation-distance` | `6` | Applied on the phone; gameplay performance not yet measured |
 | `online-mode` | `true` | Authentication phase has not started |
 | `white-list` | `false` | Whitelist phase has not started |
-| `max-players` | `20` | Capacity has not been tuned or tested |
+| `max-players` | `6` | Configured for the planned small group; concurrent-player performance not yet tested |
 
 Do not set `online-mode=false` until the authentication plan is implemented and verified.
 
