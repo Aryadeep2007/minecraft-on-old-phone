@@ -4,7 +4,7 @@
 
 A beginner-friendly guide and companion scripts for running a small, always-on Minecraft server on an older Android phone with Termux. The target setup supports Java and Bedrock players, account authentication, remote access through a tunnel, and a private web dashboard.
 
-> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, and ViaVersion have loaded, and Geyser started its RakNet listener. Bedrock client connections and sustained performance are not yet verified. NetherNet fails to initialize in the direct Termux runtime. A Debian glibc userland test also stopped during OpenJDK package configuration, before Geyser could start. Keep the current listener on RakNet; details are documented in the Bedrock guide and troubleshooting page.
+> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, and ViaVersion have loaded, and Geyser started its RakNet listener. An isolated Alpine/musl userland also started Geyser Standalone with NetherNet selected. Backend integration, Bedrock client connections, and sustained performance are not yet verified; the Paper Geyser listener remains on RakNet. See the Bedrock guide and troubleshooting page.
 
 ## Architecture
 

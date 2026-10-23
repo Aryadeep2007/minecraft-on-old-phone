@@ -56,11 +56,22 @@ The installed Geyser build warned that NetherNet support is not enabled. Geyser'
 
 A dual-transport trial used `transport: both`, `port: 19132`, and `webrtc-port: 19133`. Geyser started the RakNet UDP listener, but NetherNet initialization failed with `Cannot identify the JVM's libc`. The Geyser JAR contains native builds for Linux glibc and musl, but no Android/Bionic build. The phone's config was restored to the previous `transport: raknet`, `port: 19132`, and `webrtc-port: 0` settings. NetherNet is not currently available in this direct Termux runtime. Do not advertise this server as compatible with future clients that require NetherNet until the runtime issue is resolved.
 
-### Separate glibc userland experiment
+### Separate musl userland experiment
 
-A Debian 13 userland was installed with Termux `proot-distro` to test whether its glibc runtime could run Geyser Standalone. Debian reported glibc 2.41, and the official Geyser Standalone 2.12.0 build 1269 JAR was downloaded to a separate, phone-only test directory. Paper remained stopped throughout this experiment.
+The first experiment used Debian 13 under Termux `proot-distro`. Debian reported glibc 2.41, but its OpenJDK 21 package repeatedly stopped during configuration with `proot warning: signal 11 received from process -1`. The Java security configuration remained under `.dpkg-new` filenames, and Geyser Standalone failed with `InternalError: Error loading java.security file` before startup.
 
-The test did not reach Geyser startup. Debian's OpenJDK 21 package repeatedly stopped during configuration with `proot warning: signal 11 received from process -1`. The unpacked Java binary could print its version, but the Java security configuration remained under `.dpkg-new` filenames; launching the Geyser JAR then failed with `InternalError: Error loading java.security file`. No NetherNet listener or client connection was verified. This glibc userland approach remains unresolved and is not a supported setup path for this project yet. The original Paper plugin configuration remains on RakNet.
+An isolated Alpine 3.24.3 container provided a working alternative. Alpine's `openjdk21-jre-headless` 21.0.12 package uses musl on ARM64, matching a native build bundled by Geyser. The official Geyser Standalone 2.12.0 build 1269 was run with `-DgeyserTransport=nethernet` and a 512 MiB maximum heap. It reported `Transport set from system property: nethernet`, started built-in signaling, completed STUN discovery, and reached `Done (110.854s)`. The test process was stopped afterward. Paper remained stopped throughout.
+
+This verifies Geyser Standalone startup with NetherNet under Alpine/musl only. The standalone test was not connected to Paper, did not use Floodgate authentication, and has not been tested with a Bedrock client or through a tunnel. Combined memory and performance with Paper are also unverified. The installed Paper Geyser plugin configuration remains on RakNet; do not switch production traffic until the backend and client path are tested.
+
+For reference, the isolated test used:
+
+```sh
+proot-distro install alpine:3.24 --name alpine-musl-test
+proot-distro login alpine-musl-test -- apk add --no-cache openjdk21-jre-headless
+```
+
+The Geyser Standalone JAR and its generated test config stayed on the phone and are not part of this repository.
 
 Before exposing the service, choose a supported Bedrock transport and update the tunnel plan to match. Geyser's [Paper setup guide](https://geysermc.org/wiki/geyser/setup/) documents NetherNet, combined NetherNet/RakNet, and the required ports. Do not publicly expose unrelated services or share the Floodgate key.
 
