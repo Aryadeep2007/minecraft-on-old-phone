@@ -4,7 +4,7 @@
 
 A beginner-friendly guide and companion scripts for running a small, always-on Minecraft server on an older Android phone with Termux. The target setup supports Java and Bedrock players, account authentication, remote access through a tunnel, and a private web dashboard.
 
-> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 started successfully through the Termux start script with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit, then shut down cleanly. Player testing, sustained performance, and the remaining phases are in progress. Instructions are marked complete only after verification on the target device. Hardware, Android versions, and third-party services can change the exact steps and performance.
+> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, and ViaVersion have loaded, and Geyser started its Bedrock listener; client connections and sustained performance are not yet verified. Geyser's current warning about upcoming NetherNet support is documented in the Bedrock guide.
 
 ## Architecture
 
@@ -26,7 +26,7 @@ flowchart LR
 |---|---|---|
 | Android server | Termux and OpenJDK 21 | 🟡 In progress |
 | Lightweight Java server | PaperMC with conservative memory and view distance | 🟡 In progress |
-| Bedrock connectivity | Geyser and Floodgate | ⬜ Planned |
+| Bedrock connectivity | Geyser, Floodgate, and ViaVersion | 🟡 In progress |
 | Premium and offline Java accounts | AuthMe and FastLogin, with whitelist | ⬜ Planned |
 | Reliability | Termux:Boot, wake lock, battery and thermal guidance | ⬜ Planned |
 | Internet connectivity | TCP/UDP tunnel suitable for CGNAT | ⬜ Planned |
@@ -68,7 +68,7 @@ No command below should be treated as verified until it is tested and recorded i
 |---|---|---|
 | 1. Termux and Java | [01-termux-setup.md](docs/01-termux-setup.md) | 🟡 In progress |
 | 2. PaperMC | [02-papermc.md](docs/02-papermc.md) | 🟡 In progress |
-| 3. Bedrock with Geyser | [03-bedrock-geyser.md](docs/03-bedrock-geyser.md) | ⬜ Planned |
+| 3. Bedrock with Geyser | [03-bedrock-geyser.md](docs/03-bedrock-geyser.md) | 🟡 In progress |
 | 4. Cracked and premium Java access | [04-auth-cracked-premium.md](docs/04-auth-cracked-premium.md) | ⬜ Planned |
 | 5. 24/7 reliability | [05-24-7-reliability.md](docs/05-24-7-reliability.md) | ⬜ Planned |
 | 6. Tunnel access | [06-tunnel-access.md](docs/06-tunnel-access.md) | ⬜ Planned |
