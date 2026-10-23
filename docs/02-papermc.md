@@ -34,12 +34,15 @@ This checksum and URL identify Paper 1.21.11 stable build 132 as checked on 2026
 
 ## First startup and heap
 
-The initial launch uses a 512 MiB initial heap and a 1.5 GiB maximum heap:
+The start script in this repository uses a 512 MiB initial heap and a 1.5 GiB maximum heap. Copy `scripts/start.sh` into the phone's `~/minecraft-server` directory, where `paper.jar` lives, then launch it from Termux:
 
 ```sh
 cd ~/minecraft-server
-java -Xms512M -Xmx1536M -jar paper.jar --nogui
+chmod 700 start.sh
+./start.sh
 ```
+
+The script expects `paper.jar` in the same directory and changes into that directory before starting Paper. Keep the script's line endings as LF on Termux.
 
 On first launch, Paper writes `eula.txt` and stops while `eula=false`. Read the [Minecraft EULA](https://aka.ms/MinecraftEULA). Change the setting to `eula=true` only if the server operator agrees to the terms, then start Paper again. Never commit `eula.txt` or other live server files.
 
@@ -57,6 +60,7 @@ Verified on the target OPPO A57 using OpenJDK 21.0.13 (`aarch64`):
 | Full startup | Reached `Done (161.479s)` and created the Overworld, Nether, and End |
 | Shutdown | `stop` saved all dimensions; the Paper process exited |
 | Persistent server | Not left running after the verification boot |
+| Start script | `./start.sh` launched Paper 1.21.11 with `-Xms512M -Xmx1536M`; reached `Done (103.466s)` and shut down cleanly |
 
 During startup, Termux emitted JLine and OSHI/JNA warnings about missing Linux libraries (`libutil.so.1` and `libudev`). Netty could not read a hardware MAC address and used random bytes; Spark's optional async-profiler could not load `libdl.so.2`. Paper still reached `Done` and shut down cleanly. Player connections and sustained performance are not verified yet.
 

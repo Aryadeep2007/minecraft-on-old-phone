@@ -4,7 +4,7 @@
 
 A beginner-friendly guide and companion scripts for running a small, always-on Minecraft server on an older Android phone with Termux. The target setup supports Java and Bedrock players, account authentication, remote access through a tunnel, and a private web dashboard.
 
-> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 completed its first full startup and was stopped cleanly; performance tuning and the remaining phases are in progress. Instructions are marked complete only after verification on the target device. Hardware, Android versions, and third-party services can change the exact steps and performance.
+> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 started successfully through the Termux start script with a 1.5 GiB heap cap and `view-distance=6`, then shut down cleanly. Player testing, sustained performance, and the remaining phases are in progress. Instructions are marked complete only after verification on the target device. Hardware, Android versions, and third-party services can change the exact steps and performance.
 
 ## Architecture
 
