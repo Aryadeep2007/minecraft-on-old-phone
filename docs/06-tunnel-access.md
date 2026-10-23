@@ -1,6 +1,6 @@
 # 06 — Internet tunnel access
 
-**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent v1.0.10 was downloaded into the existing Alpine PRoot container. Its SHA-256 matched the hash published on the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10), and `playit --help` ran successfully. The agent is not yet linked to an account, and no public tunnels have been created or tested.
+**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the agent connected with zero tunnels, but Playit reports the account as `email_not_verified`. The agent was stopped after this check; its secret config remains on the phone with mode `600`. No public tunnels have been created or tested.
 
 ## Goal
 
@@ -22,12 +22,15 @@ mv playit.download playit
 ./playit --help
 ```
 
-Only continue if `sha256sum -c` reports `OK`. The agent does not accept `--version`; the release tag and verified checksum establish which binary was installed. Do not pass a secret on the command line or save one in this repository.
+Only continue if `sha256sum -c` reports `OK`. The agent does not accept `--version`; the release tag and verified checksum establish which binary was installed. The CLI provides account-claim commands. Do not pass a secret on the command line or save one in this repository.
+
+The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (`playit-cli`). The CLI's `setup` command could not attach to the daemon socket in this PRoot environment. The verified workaround used `playit-cli claim generate`, `playit-cli claim url`, and `playit-cli claim exchange`, capturing the returned key locally and storing it in the daemon's private `secret_key` TOML file with permissions `600`. Never print or commit that key. The daemon connected, but the account was not email-verified and repeatedly lost its control session; it was stopped until verification is completed.
 
 ## Tunnel status
 
 - [x] ARM64 agent download, checksum verification, and help output tested in Alpine PRoot.
-- [ ] Link the agent to a Playit account without publishing its device credential.
+- [x] Claim the agent without publishing its device credential.
+- [ ] Verify the Playit account email so the agent control session can remain active.
 - [ ] Create and test the Java TCP tunnel to Paper on local port `25565`.
 - [ ] Confirm authentication and whitelist protections before sharing any public game address.
 - [ ] Select and test the Bedrock transport and its exact required ports.
