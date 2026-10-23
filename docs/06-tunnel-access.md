@@ -1,6 +1,6 @@
 # 06 — Internet tunnel access
 
-**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel targeting `127.0.0.1:25565` and disabled Playit's `Allow IPv6` option. DNS advertised a public Java port, a TCP connection succeeded, and a Minecraft status handshake returned Paper 1.21.11 with one player online (maximum six). One `SessionNotSetup` warning occurred at startup, then logs remained quiet for 10 seconds; the successful handshake verifies forwarding at that time. A separate Termux:Boot hook was installed, syntax-checked, and manually launched; the agent remained running after its SSH launch session ended and the public TCP tunnel remained reachable. A phone reboot has not yet been tested with Playit. Do not publish the endpoint or assigned port in this repository. The earlier IPv6 failure matched the [agent repository issue #194](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
+**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel targeting `127.0.0.1:25565` and disabled Playit's `Allow IPv6` option. DNS advertised a public Java port, a TCP connection succeeded, and a Minecraft status handshake returned Paper 1.21.11 with one player online (maximum six). One `SessionNotSetup` warning occurred at startup, then logs remained quiet for 10 seconds; the successful handshake verifies forwarding at that time. A separate Termux:Boot hook was installed and syntax-checked. It was manually launched and then verified after a controlled reboot: the agent and Paper were running, the Paper readiness marker was present, and the public Java TCP tunnel was reachable. Do not publish the endpoint or assigned port in this repository. The earlier IPv6 failure matched the [agent repository issue #194](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
 
 ## Goal
 
@@ -35,7 +35,7 @@ The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (
 - [x] Disable Playit's IPv6 option and confirm the unreachable IPv6 relay error stops in a short run.
 - [x] Confirm the configured local target is `127.0.0.1:25565` and test public TCP forwarding with both a TCP connection and Minecraft status handshake.
 - [x] Install `scripts/termux-boot-start-playit.sh` as a separate executable in `~/.termux/boot/`, syntax-check it, manually launch it, and confirm public Java TCP reachability after the SSH launch session ends.
-- [ ] Reboot the phone and confirm Termux:Boot starts the Playit agent and the Java tunnel becomes reachable after Paper is ready.
+- [x] Reboot the phone and confirm Termux:Boot starts the Playit agent and the Java tunnel becomes reachable after Paper is ready.
 - [ ] Confirm authentication and whitelist protections before sharing any public game address.
 - [ ] Select and test the Bedrock transport and its exact required ports.
 
@@ -43,14 +43,14 @@ The live Paper Geyser plugin is currently configured for RakNet on UDP `19132`. 
 
 ## Start the agent after Android boots
 
-The repository includes a separate Termux:Boot hook for Playit. It uses the already linked agent in Alpine PRoot, leaves the credential in the Alpine private config, prevents duplicate processes, redirects diagnostic output to a mode-`600` file under Termux home, and never prints that log. It has been manually tested after installation; a full phone reboot test remains pending. Install it alongside the existing Paper boot hook (do not replace the Paper hook):
+The repository includes a separate Termux:Boot hook for Playit. It uses the already linked agent in Alpine PRoot, leaves the credential in the Alpine private config, prevents duplicate processes, redirects diagnostic output to a mode-`600` file under Termux home, and never prints that log. It has been verified after a controlled phone reboot. Install it alongside the existing Paper boot hook (do not replace the Paper hook):
 
 ```powershell
 scp -P 8022 scripts/termux-boot-start-playit.sh <TERMUX_USER>@<PHONE_LAN_IP>:/data/data/com.termux/files/home/.termux/boot/start-playit
 ssh -p 8022 <TERMUX_USER>@<PHONE_LAN_IP> "chmod 700 ~/.termux/boot/start-playit && sh -n ~/.termux/boot/start-playit && ~/.termux/boot/start-playit"
 ```
 
-Use the private Wi-Fi address currently shown in Android settings. Run this while connected locally and before relying on public access. The hook assumes the installed PRoot distro is named `alpine-musl-test` and that the agent and private config use the paths shown in the script. Confirm those local paths before adapting it for another phone. After launching, test Java connectivity, disconnect SSH, and confirm the tunnel still works. Complete a controlled reboot check before treating the agent as persistent. The log is stored only on the phone at `~/.local/var/log/playit-agent.log`; it may contain connection metadata, so do not publish or paste it.
+Use the private Wi-Fi address currently shown in Android settings. Run this while connected locally and before relying on public access. The hook assumes the installed PRoot distro is named `alpine-musl-test` and that the agent and private config use the paths shown in the script. Confirm those local paths before adapting it for another phone. After launching, test Java connectivity and disconnect SSH to confirm the tunnel remains available. The reboot check confirmed the SSH service, Paper readiness, and Java tunnel returned. The log is stored only on the phone at `~/.local/var/log/playit-agent.log`; it may contain connection metadata, so do not publish or paste it.
 
 ## Security
 
