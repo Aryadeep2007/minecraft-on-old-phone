@@ -56,6 +56,12 @@ The installed Geyser build warned that NetherNet support is not enabled. Geyser'
 
 A dual-transport trial used `transport: both`, `port: 19132`, and `webrtc-port: 19133`. Geyser started the RakNet UDP listener, but NetherNet initialization failed with `Cannot identify the JVM's libc`. The Geyser JAR contains native builds for Linux glibc and musl, but no Android/Bionic build. The phone's config was restored to the previous `transport: raknet`, `port: 19132`, and `webrtc-port: 0` settings. NetherNet is not currently available in this direct Termux runtime. Do not advertise this server as compatible with future clients that require NetherNet until the runtime issue is resolved.
 
+### Separate glibc userland experiment
+
+A Debian 13 userland was installed with Termux `proot-distro` to test whether its glibc runtime could run Geyser Standalone. Debian reported glibc 2.41, and the official Geyser Standalone 2.12.0 build 1269 JAR was downloaded to a separate, phone-only test directory. Paper remained stopped throughout this experiment.
+
+The test did not reach Geyser startup. Debian's OpenJDK 21 package repeatedly stopped during configuration with `proot warning: signal 11 received from process -1`. The unpacked Java binary could print its version, but the Java security configuration remained under `.dpkg-new` filenames; launching the Geyser JAR then failed with `InternalError: Error loading java.security file`. No NetherNet listener or client connection was verified. This glibc userland approach remains unresolved and is not a supported setup path for this project yet. The original Paper plugin configuration remains on RakNet.
+
 Before exposing the service, choose a supported Bedrock transport and update the tunnel plan to match. Geyser's [Paper setup guide](https://geysermc.org/wiki/geyser/setup/) documents NetherNet, combined NetherNet/RakNet, and the required ports. Do not publicly expose unrelated services or share the Floodgate key.
 
 ## Security
