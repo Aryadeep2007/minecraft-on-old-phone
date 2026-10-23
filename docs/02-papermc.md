@@ -1,6 +1,6 @@
 # 2. PaperMC
 
-**Status: In progress.** Paper 1.21.11 stable build 132 completed its first full startup and was stopped cleanly. Heap/view-distance tuning and operational scripts remain to be verified.
+**Status: In progress.** Paper 1.21.11 stable build 132 completed its first full startup and was stopped cleanly. The phone's `view-distance` is now set to 6. Heap/view-distance performance and operational scripts remain to be verified.
 
 ## Goal
 
@@ -59,6 +59,20 @@ Verified on the target OPPO A57 using OpenJDK 21.0.13 (`aarch64`):
 | Persistent server | Not left running after the verification boot |
 
 During startup, Termux emitted JLine and OSHI/JNA warnings about missing Linux libraries (`libutil.so.1` and `libudev`). Netty could not read a hardware MAC address and used random bytes; Spark's optional async-profiler could not load `libdl.so.2`. Paper still reached `Done` and shut down cleanly. Player connections and sustained performance are not verified yet.
+
+## Current server settings
+
+After the first clean shutdown, `view-distance` was changed from the generated default of 10 to the planned value of 6. The live `server.properties` remains on the phone and is not committed. The following values were read back after the edit:
+
+| Property | Current value | Note |
+|---|---:|---|
+| `view-distance` | `6` | Applied on the phone; gameplay performance not yet measured |
+| `simulation-distance` | `10` | Left unchanged |
+| `online-mode` | `true` | Authentication phase has not started |
+| `white-list` | `false` | Whitelist phase has not started |
+| `max-players` | `20` | Capacity has not been tuned or tested |
+
+Do not set `online-mode=false` until the authentication plan is implemented and verified.
 
 ## Security
 
