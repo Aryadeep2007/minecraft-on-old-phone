@@ -1,6 +1,6 @@
 # 06 — Internet tunnel access
 
-**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded, and the account is verified. A short foreground check connected the agent with zero tunnels. Its final log line was a `SessionNotSetup` warning, with no subsequent error before the check was stopped. Playit community reports indicate this warning can be benign when it is the final line, but similar logs have also appeared in reports of broken tunnels; this setup has no tunnel yet, so data forwarding remains untested ([community reply](https://discuss.playit.gg/t/agent-stuck-in-sessionnotsetup-reconnect-loop-tunnel-unreachable/5809/3), [agent issue #193](https://github.com/playit-cloud/playit-agent/issues/193)). The secret config remains on the phone with mode `600`. No public tunnels have been created or tested.
+**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel in the Playit account and the agent loaded one tunnel, but v1.0.10 reported `NetworkUnreachable` while pinging an IPv6 relay, followed by `SessionNotSetup`. A route check confirmed the phone has no IPv6 route to that relay. The agent was stopped; the tunnel target and public forwarding have not been independently verified. A matching open issue exists in the [agent repository](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
 
 ## Goal
 
@@ -31,7 +31,8 @@ The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (
 - [x] ARM64 agent download, checksum verification, and help output tested in Alpine PRoot.
 - [x] Claim the agent without publishing its device credential.
 - [x] Verify the Playit account email and confirm that the agent connects.
-- [ ] Create and test the Java TCP tunnel to Paper on local port `25565`.
+- [x] Create a Java TCP tunnel in the Playit account.
+- [ ] Verify its target is Paper at `127.0.0.1:25565`, resolve the agent's unavailable IPv6 relay route, and test public forwarding.
 - [ ] Confirm authentication and whitelist protections before sharing any public game address.
 - [ ] Select and test the Bedrock transport and its exact required ports.
 
