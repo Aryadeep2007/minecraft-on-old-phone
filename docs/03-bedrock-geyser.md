@@ -52,9 +52,11 @@ This verifies plugin startup and local UDP listener creation only. Bedrock and J
 
 ## NetherNet and transport planning
 
-The installed Geyser build warned that NetherNet support is not enabled. Geyser's current [NetherNet migration guidance](https://geysermc.org/blog/preparing-for-nethernet/) says Bedrock 26.60 is scheduled for October 27, 2026, after which Bedrock clients will require NetherNet. Built-in signaling uses TCP 19132 as well as UDP gameplay; using both NetherNet and RakNet also needs a separate UDP `webrtc-port`. The current phone config still uses `transport: raknet` and UDP 19132.
+The installed Geyser build warned that NetherNet support is not enabled. Geyser's current [NetherNet migration guidance](https://geysermc.org/blog/preparing-for-nethernet/) says Bedrock 26.60 is scheduled for October 27, 2026, after which Bedrock clients will require NetherNet. Built-in signaling uses TCP 19132 as well as UDP gameplay; using both NetherNet and RakNet also needs a separate UDP `webrtc-port`.
 
-Before exposing the service, choose the Bedrock transport and update the tunnel plan to match. Geyser's [Paper setup guide](https://geysermc.org/wiki/geyser/setup/) documents NetherNet, combined NetherNet/RakNet, and the required ports. Do not publicly expose unrelated services or share the Floodgate key.
+A dual-transport trial used `transport: both`, `port: 19132`, and `webrtc-port: 19133`. Geyser started the RakNet UDP listener, but NetherNet initialization failed with `Cannot identify the JVM's libc`. The Geyser JAR contains native builds for Linux glibc and musl, but no Android/Bionic build. The phone's config was restored to the previous `transport: raknet`, `port: 19132`, and `webrtc-port: 0` settings. NetherNet is not currently available in this direct Termux runtime. Do not advertise this server as compatible with future clients that require NetherNet until the runtime issue is resolved.
+
+Before exposing the service, choose a supported Bedrock transport and update the tunnel plan to match. Geyser's [Paper setup guide](https://geysermc.org/wiki/geyser/setup/) documents NetherNet, combined NetherNet/RakNet, and the required ports. Do not publicly expose unrelated services or share the Floodgate key.
 
 ## Security
 
