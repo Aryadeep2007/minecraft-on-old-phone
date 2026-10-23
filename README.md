@@ -4,7 +4,7 @@
 
 A beginner-friendly guide and companion scripts for running a small, always-on Minecraft server on an older Android phone with Termux. The target setup supports Java and Bedrock players, account authentication, remote access through a tunnel, and a private web dashboard.
 
-> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, ViaVersion, AuthMe 6.0.1, and PacketEvents 2.14.0 have loaded. Offline mode and the whitelist are enabled; a non-premium Java player successfully authenticated with an AuthMe password and joined on the local network. Premium verification remains untested. Termux:Boot and a guarded wake-lock/startup script are installed; after a controlled reboot, SSH returned and Paper reached its ready state about 4½ minutes after launch. After the operator disabled Playit's `Allow IPv6` option, the verified agent loaded one Java tunnel without the prior IPv6 relay error; public forwarding is not yet verified. Paper remains running. See the [authentication guide](docs/04-auth-cracked-premium.md), [24/7 reliability guide](docs/05-24-7-reliability.md), [Bedrock guide](docs/03-bedrock-geyser.md), [tunnel access guide](docs/06-tunnel-access.md), and [troubleshooting page](docs/troubleshooting.md).
+> **Project status:** Termux SSH and OpenJDK 21 are verified on the target phone. Paper 1.21.11 starts with a 1.5 GiB heap cap, 6-chunk view and simulation distances, and a six-player limit. Geyser, Floodgate, ViaVersion, AuthMe 6.0.1, and PacketEvents 2.14.0 have loaded. Offline mode and the whitelist are enabled; a non-premium Java player successfully authenticated with an AuthMe password and joined on the local network. Premium verification remains untested. Termux:Boot and a guarded wake-lock/startup script are installed; after a controlled reboot, SSH returned and Paper reached its ready state about 4½ minutes after launch. After disabling Playit's `Allow IPv6` option, the verified agent loaded the Java tunnel and a public Minecraft status handshake reached Paper 1.21.11. The agent is currently running in a temporary foreground SSH session, so tunnel persistence is not yet configured. Bedrock forwarding remains untested. See the [authentication guide](docs/04-auth-cracked-premium.md), [24/7 reliability guide](docs/05-24-7-reliability.md), [Bedrock guide](docs/03-bedrock-geyser.md), [tunnel access guide](docs/06-tunnel-access.md), and [troubleshooting page](docs/troubleshooting.md).
 
 ## Architecture
 
@@ -29,7 +29,7 @@ flowchart LR
 | Bedrock connectivity | Geyser, Floodgate, and ViaVersion | 🟡 In progress |
 | Premium and offline Java accounts | AuthMe premium bypass and PacketEvents, with whitelist | 🟡 In progress |
 | Reliability | Termux:Boot, wake lock, battery and thermal guidance | 🟡 In progress |
-| Internet connectivity | TCP/UDP tunnel suitable for CGNAT | ⬜ Planned |
+| Internet connectivity | TCP/UDP tunnel suitable for CGNAT | 🟡 In progress |
 | Private controls | Small dashboard using local RCON | ⬜ Planned |
 | Backups | User-controlled backup scripts | ⬜ Planned |
 

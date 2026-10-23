@@ -1,6 +1,6 @@
 # 06 — Internet tunnel access
 
-**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel and disabled Playit's `Allow IPv6` option. In a short foreground check, the agent loaded one tunnel without the previous `NetworkUnreachable` IPv6 relay error; it logged one `SessionNotSetup` warning at startup and then remained quiet for 10 seconds. Paper is running. The agent remains in the temporary foreground SSH session; its control session stability and public forwarding are not yet verified. The tunnel target and assigned port have not been independently read back. The earlier failure matched the [agent repository issue #194](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
+**Status: In progress.** The phone is ARM64 (`aarch64`). The official Playit Linux ARM64 agent and matching CLI v1.0.10 were downloaded into the existing Alpine PRoot container; both SHA-256 hashes matched the [official release page](https://github.com/playit-cloud/playit-agent/releases/tag/v1.0.10). The claim flow succeeded and the account is verified. The operator created a Java TCP tunnel targeting `127.0.0.1:25565` and disabled Playit's `Allow IPv6` option. DNS advertised a public Java port, a TCP connection succeeded, and a Minecraft status handshake returned Paper 1.21.11 with one player online (maximum six). One `SessionNotSetup` warning occurred at startup, then logs remained quiet for 10 seconds; the successful handshake verifies forwarding at that time. The agent remains in a temporary foreground SSH session, so persistence is not configured. Do not publish the endpoint or assigned port in this repository. The earlier IPv6 failure matched the [agent repository issue #194](https://github.com/playit-cloud/playit-agent/issues/194). The secret config remains on the phone with mode `600`.
 
 ## Goal
 
@@ -24,7 +24,7 @@ mv playit.download playit
 
 Only continue if `sha256sum -c` reports `OK`. The agent does not accept `--version`; the release tag and verified checksum establish which binary was installed. The CLI provides account-claim commands. Do not pass a secret on the command line or save one in this repository.
 
-The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (`playit-cli`). The CLI's `setup` command could not attach to the daemon socket in this PRoot environment. The verified workaround used `playit-cli claim generate`, `playit-cli claim url`, and `playit-cli claim exchange`, capturing the returned key locally and storing it in the daemon's private `secret_key` TOML file with permissions `600`. Never print or commit that key. The daemon connected, but the account was not email-verified and repeatedly lost its control session; it was stopped until verification is completed.
+The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (`playit-cli`). The CLI's `setup` command could not attach to the daemon socket in this PRoot environment. The verified workaround used `playit-cli claim generate`, `playit-cli claim url`, and `playit-cli claim exchange`, capturing the returned key locally and storing it in the daemon's private `secret_key` TOML file with permissions `600`. Never print or commit that key. Before account email verification, the agent repeatedly lost its control session. After the account was verified, the agent loaded the configured Java tunnel; public forwarding was then confirmed with a Minecraft status handshake.
 
 ## Tunnel status
 
@@ -33,7 +33,8 @@ The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (
 - [x] Verify the Playit account email and confirm that the agent connects.
 - [x] Create a Java TCP tunnel in the Playit account.
 - [x] Disable Playit's IPv6 option and confirm the unreachable IPv6 relay error stops in a short run.
-- [ ] Confirm the control session stays stable, verify the tunnel target and assigned port, and test public forwarding to Paper at `127.0.0.1:25565`.
+- [x] Confirm the configured local target is `127.0.0.1:25565` and test public TCP forwarding with both a TCP connection and Minecraft status handshake.
+- [ ] Configure the agent to survive SSH disconnects and phone restarts; verify sustained control-session stability.
 - [ ] Confirm authentication and whitelist protections before sharing any public game address.
 - [ ] Select and test the Bedrock transport and its exact required ports.
 
