@@ -1,6 +1,6 @@
 # 05 — Keep the server running
 
-**Status: In progress.** Termux:Boot was installed from F-Droid and opened once. The operator confirms Android battery/background activity was set to allow Termux and Termux:Boot to run without restriction. The boot script in this repository is installed on the phone, passes `sh -n`, and was run manually: it acquired the Termux wake lock without starting duplicate Paper or SSH daemons. A full phone reboot, charging limits, and long-duration thermal behavior are not yet verified.
+**Status: In progress.** Termux:Boot was installed from F-Droid and opened once. The operator confirms Android battery/background activity was set to allow Termux and Termux:Boot to run without restriction. The boot script in this repository is installed on the phone, passes `sh -n`, and was run manually without starting duplicate Paper or SSH daemons. A controlled reboot test also succeeded: SSH returned and Termux:Boot launched Paper, which reached its ready message about 4 minutes 28 seconds after launch. Charging limits and long-duration thermal behavior are not yet verified.
 
 ## Goal
 
@@ -40,7 +40,8 @@ If Paper is already running, the script should exit without launching another co
 - `~/.termux/boot/start-minecraft` is executable with mode `700` and passes `sh -n`.
 - Running the script manually while Paper and `sshd` were active left one Paper process and one SSH daemon process.
 - The running Paper process remains separate from the SSH command; the server reached `Done` after the detached launch.
-- The phone has not yet been rebooted to test the actual Termux:Boot event.
+- After a controlled phone reboot, SSH on port `8022` returned and exactly one Paper Java process was present, confirming the Termux:Boot script ran.
+- The boot-started Paper server logged `Done (268.405s)! For help, type "help"` and Geyser reported initialization complete. First playability took about 4 minutes 28 seconds; allow several minutes after boot before treating a slow connection as a failure.
 
 ## Android power and heat settings
 
@@ -50,7 +51,7 @@ These are still manual checks on the phone:
 2. Keep Termux:Boot allowed to run at startup and avoid force-stopping Termux.
 3. Use stable power and place the phone on a hard, ventilated surface. Do not cover it or run it in direct sun. Stop the server if the phone becomes unusually hot, swells, or shows battery damage.
 4. Do not assume continuous charging is safe for a worn battery. Use a manufacturer-supported charge limit if the device provides one, and periodically inspect battery condition and temperature.
-5. After these settings are confirmed, schedule a controlled reboot while local access is available. Check the SSH port, `java` process, server `Done` line, and Paper's TCP port before relying on unattended operation.
+5. After changing these settings, perform a controlled reboot while local access is available. Check the SSH port, `java` process, server `Done` line, and Paper's TCP port before relying on unattended operation. This phone's reboot test passed; repeat the checks after future changes to the boot script or Termux installation.
 
 Termux's own guidance recommends disabling Android battery optimizations when background process termination occurs; the exact OPPO menu names vary by Android and ColorOS version. See the [Termux app installation guidance](https://github.com/termux/termux-app#installation).
 
