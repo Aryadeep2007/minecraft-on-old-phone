@@ -39,7 +39,7 @@ The v1.0.10 release separates the daemon (`playit`) from its account-claim CLI (
 - [ ] Confirm authentication and whitelist protections before sharing any public game address.
 - [ ] Select and test the Bedrock transport and its exact required ports.
 
-The live Paper Geyser plugin is currently configured for RakNet on UDP `19132`. Geyser's separate NetherNet test only verified standalone startup in Alpine; it was not connected to Paper or tested with a player. Playit's [Bedrock guidance](https://playit.gg/support/minecraft-bedrock-nethernet/) describes the current transition and says a TCP/UDP tunnel is required for NetherNet. Playit's agent v1.0.12 is a pre-release that adds a NetherNet tunnel type; do not assume that a working Java tunnel proves Bedrock compatibility. Re-check current official guidance before selecting a Bedrock tunnel or exposing it.
+The live Paper Geyser plugin is currently configured for RakNet on UDP `19132`. Geyser's separate NetherNet test only verified standalone startup in Alpine; it was not connected to Paper or tested with a player. Geyser's [Paper setup guide](https://geysermc.org/wiki/geyser/setup/) requires TCP signaling and UDP gameplay for built-in NetherNet. Playit's [current Bedrock support note](https://playit.gg/support/minecraft-bedrock-nethernet/) says TCP/UDP tunnels require Premium while free availability is being worked on. Do not assume that a working Java tunnel proves Bedrock compatibility. Re-check the current account plan, supported tunnel type, and Bedrock client requirements before selecting or exposing a Bedrock tunnel.
 
 ## Start the agent after Android boots
 
