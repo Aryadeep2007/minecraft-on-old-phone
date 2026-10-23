@@ -33,7 +33,9 @@ Use the actual server and backup paths if they differ from the example. The appl
 
 ## RCON prerequisite
 
-The current Paper configuration has RCON disabled. The dashboard cannot control Paper until RCON is enabled with a strong unique password. Keep RCON restricted to the phone itself; never tunnel or port-forward RCON. Do not change Paper's bind address as part of enabling RCON without first checking whether that would affect the existing Playit target or direct LAN access. Deployment is pending this explicit network-configuration review.
+The live Paper configuration was inspected over key-authenticated SSH on 2026-10-24. It has `enable-rcon=false`, `rcon.port=25575`, a blank `server-ip`, and no separate `rcon.ip` property. Paper documents that blank `server-ip` binds the game server to all interfaces ([server properties](https://docs.papermc.io/paper/reference/server-properties/)). RCON was left disabled: enabling it with this configuration could expose the console on the phone's network interfaces. Changing `server-ip` to loopback would also change the game listener and could stop direct Wi-Fi clients from connecting. The existing Java tunnel points to `127.0.0.1:25565`, but that alone is not enough to justify changing the bind address without a tested rollback plan.
+
+The dashboard therefore remains uninstalled on the phone and its RCON controls are not yet usable. Before enabling RCON, verify a Paper-supported dedicated loopback bind for this exact version or choose a different local control interface. Never tunnel or port-forward RCON.
 
 ## Start and connect
 
