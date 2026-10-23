@@ -1,6 +1,6 @@
 # 04 — Java authentication and offline accounts
 
-**Status: In progress.** AuthMe 6.0.1 and PacketEvents 2.14.0 are installed and verified as loaded on Paper 1.21.11. The server is still in online mode and the whitelist is still disabled. Authentication settings and Java client logins have not yet been tested.
+**Status: In progress.** AuthMe 6.0.1 and PacketEvents 2.14.0 are installed on Paper 1.21.11. AuthMe premium verification is enabled, the server is in offline mode, and the whitelist is on. The operator's Java name is whitelisted. The server reached `Done`; player registration, login, and premium verification have not yet been tested.
 
 ## Goal
 
@@ -42,9 +42,21 @@ Start Paper with `./start.sh` and confirm the startup log lists `AuthMe (6.0.1)`
 - Existing Geyser, Floodgate, and ViaVersion also loaded. Geyser started UDP port 19132.
 - No player authentication flow has been tested yet. `online-mode=true` and `white-list=false` were left unchanged during this install and startup check.
 
+## Join the local server
+
+With Paper running, add a Java name to the whitelist in the server console:
+
+```text
+whitelist add <YOUR_JAVA_USERNAME>
+```
+
+From a Java client on the same Wi-Fi network, connect to `<PHONE_LAN_IP>:25565` using Minecraft 1.21.11. A non-premium Java profile must use the same name that was added to the whitelist. On first join, register with `/register <strong-password> <strong-password>`; on later joins, use `/login <password>`. Use a unique password, and do not put it in chat, screenshots, logs, or public files.
+
+This phone's operator name was added successfully through the console (`Added ... to the whitelist`). The exact player name and phone address are intentionally omitted from this public guide.
+
 ## Next configuration work
 
-Do not switch the server to offline mode until AuthMe's settings have been reviewed. The next authentication step must configure AuthMe's premium bypass (`settings.enablePremium: true`), keep PacketEvents installed, change the server to offline mode, enable the whitelist, and restart. Back up the world and live configs first. Then test registration and login with a non-premium test account, premium verification with an enrolled premium account, whitelist enforcement, and Bedrock join behavior before exposing the server through a tunnel.
+The live server is now in offline mode with AuthMe premium bypass (`settings.enablePremium: true`), PacketEvents installed, and the whitelist enabled. The next check is a successful non-premium registration and login, followed by a premium account enrollment test if one is available. Also check whitelist enforcement and Bedrock join behavior before exposing the server through a tunnel.
 
 For premium bypass, players opt in individually after registration/login with `/premium`; AuthMe verifies their Mojang account and stores the enrollment. Without PacketEvents, AuthMe fails closed and uses normal password authentication.
 
