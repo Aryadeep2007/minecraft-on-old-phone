@@ -1,6 +1,6 @@
 # 05 — Keep the server running
 
-**Status: In progress.** Termux:Boot was installed from F-Droid and opened once. The boot script in this repository is installed on the phone, passes `sh -n`, and was run manually: it acquired the Termux wake lock without starting duplicate Paper or SSH daemons. A full phone reboot, Android battery restrictions, charging limits, and long-duration thermal behavior are not yet verified.
+**Status: In progress.** Termux:Boot was installed from F-Droid and opened once. The operator confirms Android battery/background activity was set to allow Termux and Termux:Boot to run without restriction. The boot script in this repository is installed on the phone, passes `sh -n`, and was run manually: it acquired the Termux wake lock without starting duplicate Paper or SSH daemons. A full phone reboot, charging limits, and long-duration thermal behavior are not yet verified.
 
 ## Goal
 
@@ -53,6 +53,8 @@ These are still manual checks on the phone:
 5. After these settings are confirmed, schedule a controlled reboot while local access is available. Check the SSH port, `java` process, server `Done` line, and Paper's TCP port before relying on unattended operation.
 
 Termux's own guidance recommends disabling Android battery optimizations when background process termination occurs; the exact OPPO menu names vary by Android and ColorOS version. See the [Termux app installation guidance](https://github.com/termux/termux-app#installation).
+
+The operator reports completing the battery/background setting for both Termux apps on the target phone. Android does not expose that setting through the Termux SSH session, so it has not been independently read back.
 
 ## Security
 
